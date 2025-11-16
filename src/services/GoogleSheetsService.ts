@@ -1,6 +1,5 @@
 import { google, sheets_v4 } from 'googleapis';
 import { JWT } from 'google-auth-library';
-import * as path from 'path';
 
 class GoogleSheetsService {
   private sheets: sheets_v4.Sheets;
