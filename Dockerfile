@@ -3,7 +3,7 @@ FROM node:20-alpine AS deps-prod
 
 WORKDIR /app
 
-COPY ./package.json .
+COPY package.json ./
 
 RUN npm install --omit=dev
 
@@ -11,32 +11,33 @@ FROM deps-prod AS build
 
 RUN npm install --include=dev
 
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
 COPY . .
+# COPY src ./src
 
 RUN npm run build
 
 FROM node:20-alpine AS prod
 
 WORKDIR /app
+# RUN npm run build
 
 COPY --from=build /app/package*.json .
+COPY --from=build /app/credentials.json .
 COPY --from=deps-prod /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
-
-RUN npm start
 
 # Устанавливаем cron
 RUN apk add --no-cache dcron
 
-# Создаем скрипт для запуска
-RUN echo '#!/bin/sh\ncd /app && /usr/local/bin/npm run export' > /export-app.sh && \
-    chmod +x /export-app.sh
+# Настраиваем cron на ежеминутный запуск
+RUN echo "* * * * * cd /app&&npm run export >> /var/log/cron.log" > /etc/crontabs/root 
 
-# Настраиваем cron для ежечасного запуска - ежеминутный для теста
-RUN echo "* * * * * /export-app.sh >> /var/log/cron.log 2>&1" > /etc/crontab
-
-# Создаем лог-файл и запускаем cron
+# Создаем лог-файл
 RUN touch /var/log/cron.log
+
+RUN crond -s reload 
 
 # Запускаем cron и основное приложение
 CMD ["sh", "-c", "crond -f -l 8 & npm run start"]

@@ -76,5 +76,5 @@ services:
         max-size: 10m
         max-file: 5
 
-    command: [ "npm", "run", "start" ]
+    # command: [ "npm", "run", "start" ]
     restart: unless-stopped
