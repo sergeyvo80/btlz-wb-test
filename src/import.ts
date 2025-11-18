@@ -22,58 +22,57 @@ if (!WB_API_URL) {
 async function fetchTariffsFromAPI(date: string) {
   try {
     const url = `${WB_API_URL}?date=${date}`;
-    // const response = await fetch(url, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: WB_TOKEN as string,
-    //   },
-    // });
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: WB_TOKEN as string,
+      },
+    });
 
-    // if (!response.ok) {
-    //   throw new Error(
-    //     `HTTP error! status: ${response.status}, statusText: ${response.statusText}`
-    //   );
-    // }
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error! status: ${response.status}, statusText: ${response.statusText}`
+      );
+    }
 
-    // const data = await response.json();
+    const dataResponse: TariffsBoxResponse = await response.json();
 
-
-    const dataResponse: TariffsBoxResponse = {
-      "response": {
-        "data": {
-          "dtNextBox": "",
-          "dtTillMax": "2025-11-19",
-          "warehouseList": [
-            {
-              "boxDeliveryBase": "46",
-              "boxDeliveryCoefExpr": "100",
-              "boxDeliveryLiter": "14",
-              "boxDeliveryMarketplaceBase": "-",
-              "boxDeliveryMarketplaceCoefExpr": "-",
-              "boxDeliveryMarketplaceLiter": "-",
-              "boxStorageBase": "0,07",
-              "boxStorageCoefExpr": "100",
-              "boxStorageLiter": "0,07",
-              "geoName": "",
-              "warehouseName": "Цифровой склад"
-            },
-            {
-              "boxDeliveryBase": "89,7",
-              "boxDeliveryCoefExpr": "195",
-              "boxDeliveryLiter": "27,3",
-              "boxDeliveryMarketplaceBase": "89,7",
-              "boxDeliveryMarketplaceCoefExpr": "195",
-              "boxDeliveryMarketplaceLiter": "27,3",
-              "boxStorageBase": "0,1",
-              "boxStorageCoefExpr": "145",
-              "boxStorageLiter": "0,1",
-              "geoName": "Центральный федеральный округ",
-              "warehouseName": "Коледино"
-            },
-          ]
-        }
-      }
-    };
+    // const dataResponse: TariffsBoxResponse = {
+    //   "response": {
+    //     "data": {
+    //       "dtNextBox": "",
+    //       "dtTillMax": "2025-11-19",
+    //       "warehouseList": [
+    //         {
+    //           "boxDeliveryBase": "46",
+    //           "boxDeliveryCoefExpr": "100",
+    //           "boxDeliveryLiter": "14",
+    //           "boxDeliveryMarketplaceBase": "-",
+    //           "boxDeliveryMarketplaceCoefExpr": "-",
+    //           "boxDeliveryMarketplaceLiter": "-",
+    //           "boxStorageBase": "0,07",
+    //           "boxStorageCoefExpr": "100",
+    //           "boxStorageLiter": "0,07",
+    //           "geoName": "",
+    //           "warehouseName": "Цифровой склад"
+    //         },
+    //         {
+    //           "boxDeliveryBase": "89,7",
+    //           "boxDeliveryCoefExpr": "195",
+    //           "boxDeliveryLiter": "27,3",
+    //           "boxDeliveryMarketplaceBase": "89,7",
+    //           "boxDeliveryMarketplaceCoefExpr": "195",
+    //           "boxDeliveryMarketplaceLiter": "27,3",
+    //           "boxStorageBase": "0,1",
+    //           "boxStorageCoefExpr": "145",
+    //           "boxStorageLiter": "0,1",
+    //           "geoName": "Центральный федеральный округ",
+    //           "warehouseName": "Коледино"
+    //         },
+    //       ]
+    //     }
+    //   }
+    // };
 
     const data: TariffsBox = dataResponse.response.data;
 
@@ -110,7 +109,7 @@ async function importTariffs(date: string) {
 
     // Преобразуем данные из API в формат БД и вставляем
     const recordsToInsert = tariffsData.warehouseList.map((item: any) => ({
-      dtImport: date ? new Date(date) : null,
+      dtImport: date ?? null,
       dtNextBox: tariffsData.dtNextBox ? new Date(tariffsData.dtNextBox) : null,
       dtTillMax: tariffsData.dtTillMax ? new Date(tariffsData.dtTillMax) : null,
       boxDeliveryBase: parseFloatFromString(item.boxDeliveryBase) ?? null,

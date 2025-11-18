@@ -7,10 +7,11 @@ try {
   const tariffsBoxArr: string[][] = [];
 
   for (const item of tariffsBox) {
-    console.log(Object.values(item));
+    // console.log(Object.values(item));
 
     const dataArr = <string[]>Object.values(item);
     dataArr.shift();
+
     tariffsBoxArr.push(dataArr);
   }
 
