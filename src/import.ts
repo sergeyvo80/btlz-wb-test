@@ -38,46 +38,45 @@ async function fetchTariffsFromAPI(date: string) {
     // const data = await response.json();
 
 
-const dataResponse: TariffsBoxResponse = {
-  "response": {
-    "data": {
-      "dtNextBox": "",
-      "dtTillMax": "2025-11-19",
-      "warehouseList": [
-        {
-          "boxDeliveryBase": "46",
-          "boxDeliveryCoefExpr": "100",
-          "boxDeliveryLiter": "14",
-          "boxDeliveryMarketplaceBase": "-",
-          "boxDeliveryMarketplaceCoefExpr": "-",
-          "boxDeliveryMarketplaceLiter": "-",
-          "boxStorageBase": "0,07",
-          "boxStorageCoefExpr": "100",
-          "boxStorageLiter": "0,07",
-          "geoName": "",
-          "warehouseName": "Цифровой склад"
-        },
-        {
-          "boxDeliveryBase": "89,7",
-          "boxDeliveryCoefExpr": "195",
-          "boxDeliveryLiter": "27,3",
-          "boxDeliveryMarketplaceBase": "89,7",
-          "boxDeliveryMarketplaceCoefExpr": "195",
-          "boxDeliveryMarketplaceLiter": "27,3",
-          "boxStorageBase": "0,1",
-          "boxStorageCoefExpr": "145",
-          "boxStorageLiter": "0,1",
-          "geoName": "Центральный федеральный округ",
-          "warehouseName": "Коледино"
-        },
-      ]
-    }
-  }
-};
+    const dataResponse: TariffsBoxResponse = {
+      "response": {
+        "data": {
+          "dtNextBox": "",
+          "dtTillMax": "2025-11-19",
+          "warehouseList": [
+            {
+              "boxDeliveryBase": "46",
+              "boxDeliveryCoefExpr": "100",
+              "boxDeliveryLiter": "14",
+              "boxDeliveryMarketplaceBase": "-",
+              "boxDeliveryMarketplaceCoefExpr": "-",
+              "boxDeliveryMarketplaceLiter": "-",
+              "boxStorageBase": "0,07",
+              "boxStorageCoefExpr": "100",
+              "boxStorageLiter": "0,07",
+              "geoName": "",
+              "warehouseName": "Цифровой склад"
+            },
+            {
+              "boxDeliveryBase": "89,7",
+              "boxDeliveryCoefExpr": "195",
+              "boxDeliveryLiter": "27,3",
+              "boxDeliveryMarketplaceBase": "89,7",
+              "boxDeliveryMarketplaceCoefExpr": "195",
+              "boxDeliveryMarketplaceLiter": "27,3",
+              "boxStorageBase": "0,1",
+              "boxStorageCoefExpr": "145",
+              "boxStorageLiter": "0,1",
+              "geoName": "Центральный федеральный округ",
+              "warehouseName": "Коледино"
+            },
+          ]
+        }
+      }
+    };
 
-  const data: TariffsBox = dataResponse.response.data;
+    const data: TariffsBox = dataResponse.response.data;
 
-  // console.log('>>>>>', data);
     return data;
   } catch (error) {
     console.error("Ошибка при запросе к API:", error);
@@ -106,8 +105,6 @@ async function importTariffs(date: string) {
       return;
     }
 
-console.log('>>>>>', date);
-
     // Очищаем старые данные за эту дату (опционально)
     await knex("tariffs-box").where("dtImport", date).delete();
 
@@ -129,7 +126,6 @@ console.log('>>>>>', date);
       warehouseName: item.warehouseName ?? null,
     }));
 
-    // console.log('>>>>>', recordsToInsert);
     await knex("tariffs-box").insert(recordsToInsert);
 
     console.log(`Успешно импортировано ${recordsToInsert.length} записей`);

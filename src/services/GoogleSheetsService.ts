@@ -1,6 +1,9 @@
 import { google, sheets_v4 } from 'googleapis';
 import { JWT } from 'google-auth-library';
 
+/**
+ * Сервис для работы с Google Sheets API
+ */
 class GoogleSheetsService {
   private sheets: sheets_v4.Sheets;
   private spreadsheetId: string;
@@ -10,6 +13,11 @@ class GoogleSheetsService {
     this.sheets = this.initializeSheets(credentialsPath);
   }
 
+  /**
+   * Инициализация Google Sheets API
+   * @param credentialsPath 
+   * @returns 
+   */
   private initializeSheets(credentialsPath: string): sheets_v4.Sheets {
     const auth = new JWT({
       keyFile: credentialsPath,
@@ -20,8 +28,11 @@ class GoogleSheetsService {
     return google.sheets({ version: 'v4', auth });
   }
 
-
-  // Запись массива данных
+  /**
+   * Запись массива данных
+   * @param data 
+   * @param range 
+   */
   async appendMultipleData(data: string[][], range: string = 'Sheet1'): Promise<void> {
     try {
 
@@ -43,7 +54,11 @@ class GoogleSheetsService {
     }
   }
 
-  // Обновление конкретного диапазона
+  /**
+   * Обновление конкретного диапазона
+   * @param data 
+   * @param range 
+   */
   async updateRange(data: any[][], range: string): Promise<void> {
     try {
       const request: sheets_v4.Params$Resource$Spreadsheets$Values$Update = {
@@ -63,7 +78,11 @@ class GoogleSheetsService {
     }
   }
 
-  // Создание нового листа
+  /**
+   * Создание нового листа
+   * @param sheetName 
+   * @param headers 
+   */
   async createSheet(sheetName: string, headers: string[]): Promise<void> {
     try {
       // Создаем новый лист
@@ -83,6 +102,7 @@ class GoogleSheetsService {
       await this.sheets.spreadsheets.batchUpdate(addSheetRequest);
 
       // Записываем заголовки
+      // TODO: Добавить заголовки в зависимости от количества столбцов
       await this.updateRange([headers], `${sheetName}!A1:N1`);
 
       // // Записываем данные
@@ -94,6 +114,7 @@ class GoogleSheetsService {
       throw error;
     }
   }
+
 }
 
 export default GoogleSheetsService;
