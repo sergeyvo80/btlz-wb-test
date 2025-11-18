@@ -83,7 +83,7 @@ class GoogleSheetsService {
       await this.sheets.spreadsheets.batchUpdate(addSheetRequest);
 
       // Записываем заголовки
-      await this.updateRange([headers], `${sheetName}!A1:M1`);
+      await this.updateRange([headers], `${sheetName}!A1:N1`);
 
       // // Записываем данные
       // await this.appendMultipleData(headers, sheetName);

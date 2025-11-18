@@ -21,26 +21,27 @@ async function exportToSpreadsheet(spreadsheetId: string) {
 
   const data: string[] = [];
 
-  // try {
-  //   // Создание нового листа
-  //   await sheetsService.createSheet('stocks_coefs', [
-  //       "dtNextBox",
-  //       "dtTillMax",
-  //       "boxDeliveryBase",
-  //       "boxDeliveryCoefExpr",
-  //       "boxDeliveryLiter",
-  //       "boxDeliveryMarketplaceBase",
-  //       "boxDeliveryMarketplaceCoefExpr",
-  //       "boxDeliveryMarketplaceLiter",
-  //       "boxStorageBase",
-  //       "boxStorageCoefExpr",
-  //       "boxStorageLiter",
-  //       "geoName",
-  //       "warehouseName",
-  //   ]);
-  // } catch (error) {
-  //   // console.error('Произошла ошибка:', error);
-  // }
+  try {
+    // Создание нового листа
+    await sheetsService.createSheet('stocks_coefs', [
+        "dtImport",
+        "dtNextBox",
+        "dtTillMax",
+        "boxDeliveryBase",
+        "boxDeliveryCoefExpr",
+        "boxDeliveryLiter",
+        "boxDeliveryMarketplaceBase",
+        "boxDeliveryMarketplaceCoefExpr",
+        "boxDeliveryMarketplaceLiter",
+        "boxStorageBase",
+        "boxStorageCoefExpr",
+        "boxStorageLiter",
+        "geoName",
+        "warehouseName",
+    ]);
+  } catch (error) {
+    // console.error('Произошла ошибка:', error);
+  }
 
   try {
     // Запись нескольких строк

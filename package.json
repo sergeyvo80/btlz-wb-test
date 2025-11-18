@@ -7,11 +7,13 @@
     "scripts": {
         "dev": "nodemon --watch src --ext ts --exec tsx src/app.ts",
         "dev-export": "nodemon --watch src --ext ts --exec tsx src/export.ts",
+        "dev-import": "nodemon --watch src --ext ts --exec tsx src/import.ts",
         "watch:build": "tsc --build --force --verbose --watch",
         "knex:dev": "tsx src/utils/knex.ts",
         "build": "tsc --allowJs",
         "start": "node dist/app.js",
         "export": "node dist/export.js",
+        "import": "node dist/import.js",
         "knex": "node dist/utils/knex.js",
         "tsc:check": "tsc --allowJs --noEmit",
         "prettier": "prettier --config .prettierrc.json src/**/*.js --check",

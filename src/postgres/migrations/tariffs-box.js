@@ -5,6 +5,7 @@
 export async function up(knex) {
     return knex.schema.createTable("tariffs-box", (table) => {
         table.increments("id");
+        table.date("dtImport");
         table.date("dtNextBox");
         table.date("dtTillMax");
         table.float("boxDeliveryBase");

@@ -31,8 +31,9 @@ COPY --from=build /app/dist ./dist
 # Устанавливаем cron
 RUN apk add --no-cache dcron
 
-# Настраиваем cron на ежеминутный запуск
-RUN echo "* * * * * cd /app&&npm run export >> /var/log/cron.log" > /etc/crontabs/root 
+# Настраиваем cron: export - ежеминутно, import - ежечасно
+RUN printf "* * * * * cd /app && npm run export >> /var/log/cron.log 2>&1\n* * * * * cd /app && npm run import >> /var/log/cron.log 2>&1\n" > /etc/crontabs/root && \
+    chmod 600 /etc/crontabs/root 
 
 # Создаем лог-файл
 RUN touch /var/log/cron.log
